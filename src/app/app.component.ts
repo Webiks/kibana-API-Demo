@@ -10,13 +10,16 @@ export class AppComponent implements OnInit {
 
 
   title = 'kibana API demo';
-  url = "https://localhost:5601/rey/app/kibana#/dashboard?embed=true&_g=()&_a=(filters:!(),options:(darkTheme:!f),panels:!(),query:(query_string:(analyze_wildcard:!t,query:'*')),timeRestore:!f,title:plugin,uiState:(),viewMode:view)";
+  url = "https://localhost:5601/rey/app/kibana#/dashboard?embed=true&_g=(time:(from:now-5y,mode:quick,to:now))&_a=(filters:!(),options:(darkTheme:!f),panels:!(),query:(query_string:(analyze_wildcard:!t,query:'*')),timeRestore:!f,title:plugin,uiState:(),viewMode:view)";
+  //url = "http://localhost:5601/app/kibana#/dashboard?embed=true&_g=(time:(from:now-5y,mode:quick,to:now))&_a=(filters:!(),options:(darkTheme:!f),panels:!(),query:(query_string:(analyze_wildcard:!t,query:'*')),timeRestore:!f,title:plugin,uiState:(),viewMode:view)";
+
   private _iframeUrl: string = this.url;
 
   private _iframeSafeUrl: SafeResourceUrl;
   private _iframeElement: any;
   private _iframeWindow: any;
   private _elasticIndex: string = "logstash-*";
+  private _text: string = "";
 
 
   get iframeSafeUrl(): SafeResourceUrl {
@@ -59,6 +62,14 @@ export class AppComponent implements OnInit {
     this._elasticIndex = value;
   }
 
+  get text(): string {
+    return this._text;
+  }
+
+  set text(value: string) {
+    this._text = value;
+  }
+
   constructor(private domSanitizer: DomSanitizer,) {
   }
 
@@ -69,10 +80,10 @@ export class AppComponent implements OnInit {
   private createBaseDashboard() {
     let visDefenetion1 = {};
     let visDefenetion2 = {};
-
+    visDefenetion1["id"] = "clientip";
     visDefenetion1["isFullState"] = true;
     visDefenetion1["visState"] = {
-      "title": "referer",
+      "title": "clientip",
       "type": "pie",
       "params": {
         "shareYAxis": true,
@@ -107,7 +118,7 @@ export class AppComponent implements OnInit {
     visDefenetion1["visIndex"] = this.elasticIndex;
     visDefenetion1["visDashboardDefenetion"] = {
       col: 1,
-      id: "referer",
+      id: "clientip",
       panelIndex: 1,
       row: 1,
       size_x: 5,
@@ -115,6 +126,8 @@ export class AppComponent implements OnInit {
       type: "visualization"
     };
 
+    visDefenetion2["id"] = "memory";
+    visDefenetion2["isFullState"] = true;
     visDefenetion2["visState"] = {
       "title": "memory",
       "type": "histogram",
@@ -154,6 +167,7 @@ export class AppComponent implements OnInit {
       ],
       "listeners": {}
     };
+    visDefenetion2["visIndex"] = this.elasticIndex;
     visDefenetion2["visDashboardDefenetion"] = {
       col: 7,
       id: "memory",
@@ -163,23 +177,31 @@ export class AppComponent implements OnInit {
       size_y: 5,
       type: "visualization"
     };
-    this.callPlugin([visDefenetion1, visDefenetion2]);
+    this.callPlugin({actionType: "setVisualization", visDefenetion: [visDefenetion1, visDefenetion2]});
 
 
   }
 
   private addPartialVis(iReplace: boolean) {
+    //Define visualization object
+
+    //Set visualiztion ID
     let visPartial = {id: "bytes"};
 
+    //Set isFullState to false meaning: the programmer pass minimal defenetion attributes
     visPartial["isFullState"] = false;
+
+    //Set the elasticsearch index where the data store
     visPartial["visIndex"] = this.elasticIndex;
 
+    //Set minimal attributes of the visualization, in this example, create pie visualization on the field bytes
     visPartial["visState"] = {visType: 'pie', field: 'bytes'};
+
     if (iReplace) {
       visPartial["prevoiusVisId"] = "memory";
 
     }
-    else{
+    else {
       visPartial["visDashboardDefenetion"] = {
         col: 1,
         id: "bytes",
@@ -192,7 +214,7 @@ export class AppComponent implements OnInit {
     }
 
 
-    this.callPlugin([visPartial]);
+    this.callPlugin({actionType: "setVisualization", visDefenetion: [visPartial]});
 
   }
 
@@ -248,7 +270,7 @@ export class AppComponent implements OnInit {
       };
     }
 
-    this.callPlugin([visDefenetion]);
+    this.callPlugin({actionType: "setVisualization", visDefenetion: [visDefenetion]});
 
   }
 
@@ -256,10 +278,10 @@ export class AppComponent implements OnInit {
 
   }
 
-  private callPlugin(iVisArr) {
+  private callPlugin(iMessage) {
     this.iframeElement = document.getElementById('multintIframe');
     this.iframeWindow = (<HTMLIFrameElement>this.iframeElement).contentWindow;
-    this.iframeWindow.postMessage({actionType: "setVisualization", visDefenetion: iVisArr}, '*');
+    this.iframeWindow.postMessage(iMessage, '*');
   }
 
   private aa() {
@@ -320,6 +342,10 @@ export class AppComponent implements OnInit {
     // this.iframeWindow.postMessage({actionType: "setVisualization", visDefenetion: [visPartial]}, '*');
 
 
+  }
+
+  private searchText(iText) {
+    this.callPlugin({actionType: "addSearchChip", text: iText, index: this.elasticIndex});
   }
 
 

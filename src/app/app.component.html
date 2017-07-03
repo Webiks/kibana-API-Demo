@@ -1,11 +1,16 @@
 <h1>
   {{title}}
 </h1>
-<button (click)="createBaseDashboard()">Create base dashboard</button>
+
+<button (click)="createBaseDashboard()">Create basic dashboard</button>
+
 <button (click)="addFullVis(false)">Add Full State Visualization</button>
 <button (click)="addFullVis(true)">Replace Full State Visualization</button>
 <button (click)="addPartialVis(false)">Add Partial State Visualization</button>
 <button (click)="addPartialVis(true)">Replace Partial State Visualization</button>
+<input type="text" [(ngModel)]="text">
+<button (click)="searchText(text)">Search Text</button>
 
-<iframe id="multintIframe" *ngIf="_iframeSafeUrl" [src]="_iframeSafeUrl" frameborder="0" scrolling="no" height="934px" width="100%"></iframe>
+<iframe id="multintIframe" *ngIf="_iframeSafeUrl" [src]="_iframeSafeUrl" frameborder="0" scrolling="no" height="934px"
+        width="100%"></iframe>
 
