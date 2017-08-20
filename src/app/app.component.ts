@@ -70,11 +70,24 @@ export class AppComponent implements OnInit {
     this._text = value;
   }
 
-  constructor(private domSanitizer: DomSanitizer,) {
+  constructor(private domSanitizer: DomSanitizer) {
+    this.iFrameAddListener();
   }
 
   ngOnInit() {
     this.iframeSafeUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.iframeUrl);
+  }
+
+
+  private iFrameAddListener() {
+    let that = this;
+    let eventMethod = "addEventListener";
+    let eventer = window[eventMethod];
+    let messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
+
+    // Listen to message from parent (or any other) window
+    eventer(messageEvent, this.pluginNotification);
+
   }
 
   private createBaseDashboard() {
@@ -195,7 +208,7 @@ export class AppComponent implements OnInit {
     visPartial["visIndex"] = this.elasticIndex;
 
     //Set minimal attributes of the visualization, in this example, create pie visualization on the field bytes
-    visPartial["visState"] = {visType: 'pie', field: 'bytes'};
+    visPartial["visState"] = {visType: 'pie', field: 'bytes', "title": "accc"};
 
     if (iReplace) {
       visPartial["prevoiusVisId"] = "memory";
@@ -347,6 +360,26 @@ export class AppComponent implements OnInit {
   private searchText(iText) {
     this.callPlugin({actionType: "addSearchChip", text: iText, index: this.elasticIndex});
   }
+
+  private createIndexPattern() {
+    this.callPlugin({actionType: "createIndexPattern", index: this.elasticIndex, timeField: "@timestamp"});
+  }
+
+  private isIndexPatternExist() {
+    this.callPlugin({actionType: "isIndexPatternExist", indexPattern: this.elasticIndex});
+  }
+
+  private setDefaultIndexPattern() {
+    this.callPlugin({actionType: "setDefaultIndexPattern", indexPattern: "aa"});
+  }
+
+  private pluginNotification = (e) => {
+    let func = e.data.split('##')[0];
+    let res = JSON.parse(e.data.split('##')[1]);
+    console.log("func:", func, "res:", res);
+
+
+  };
 
 
 }

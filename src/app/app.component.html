@@ -10,6 +10,9 @@
 <button (click)="addPartialVis(true)">Replace Partial State Visualization</button>
 <input type="text" [(ngModel)]="text">
 <button (click)="searchText(text)">Search Text</button>
+<button (click)="createIndexPattern()">Create Index Pattern</button>
+<button (click)="isIndexPatternExist()">Is Index Pattern Exist</button>
+<button (click)="setDefaultIndexPattern()">setDefaultIndexPattern</button>
 
 <iframe id="multintIframe" *ngIf="_iframeSafeUrl" [src]="_iframeSafeUrl" frameborder="0" scrolling="no" height="934px"
         width="100%"></iframe>
