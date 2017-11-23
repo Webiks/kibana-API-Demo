@@ -10,9 +10,18 @@ export class AppComponent implements OnInit {
 
 
   title = 'kibana API demo';
-  url = "https://localhost:5601/rey/app/kibana#/dashboard?embed=true&_g=(time:(from:now-5y,mode:quick,to:now))&_a=(filters:!(),options:(darkTheme:!f),panels:!(),query:(query_string:(analyze_wildcard:!t,query:'*')),timeRestore:!f,title:plugin,uiState:(),viewMode:view)";
+
+  //url for dev
+  //url = "https://localhost:5601/rey/app/kibana#/dashboard?embed=true&_g=(time:(from:now-5y,mode:quick,to:now))&_a=(filters:!(),options:(darkTheme:!f),panels:!(),query:(query_string:(analyze_wildcard:!t,query:'*')),timeRestore:!f,title:plugin,uiState:(),viewMode:view)";
+
+  //url for dev version 6.0.0
+  url = "http://localhost:5601/rey/app/kibana#/dashboard?embed=true&_g=(time:(from:now-5y,mode:quick,to:now))&_a=(filters:!(),options:(darkTheme:!f),panels:!(),query:(query_string:(analyze_wildcard:!t,query:'*')),timeRestore:!f,title:plugin,uiState:(),viewMode:view)";
+
+  //url for not dev
   //url = "http://localhost:5601/app/kibana#/dashboard?embed=true&_g=(time:(from:now-5y,mode:quick,to:now))&_a=(filters:!(),options:(darkTheme:!f),panels:!(),query:(query_string:(analyze_wildcard:!t,query:'*')),timeRestore:!f,title:plugin,uiState:(),viewMode:view)";
 
+  //url for kibana version 5.3.0
+  //url = "https://localhost:5601/rey/app/kibana#/dashboard/create?embed=true&_g=(time:(from:now-5y,mode:quick,to:now))&_a=(filters:!(),options:(darkTheme:!f),panels:!(),query:(query_string:(analyze_wildcard:!t,query:'*')),timeRestore:!f,title:plugin,uiState:(),viewMode:view)";
   private _iframeUrl: string = this.url;
 
   private _iframeSafeUrl: SafeResourceUrl;
@@ -20,6 +29,7 @@ export class AppComponent implements OnInit {
   private _iframeWindow: any;
   private _elasticIndex: string = "logstash-*";
   private _text: string = "";
+  private showVis: boolean = false;
 
 
   get iframeSafeUrl(): SafeResourceUrl {
@@ -231,6 +241,33 @@ export class AppComponent implements OnInit {
 
   }
 
+  private flush() {
+    this.callPlugin({actionType: "flushSearchChip"});
+
+  }
+
+  private toggle() {
+    let visPartial = {};
+
+    if (!this.showVis) {
+      visPartial["prevoiusVisId"] = "memory";
+    }
+    else {
+      visPartial["visDashboardDefenetion"] = {
+        col: 1,
+        id: "memory",
+        panelIndex: 9,
+        row: 1,
+        size_x: 3,
+        size_y: 3,
+        type: "visualization"
+      };
+    }
+
+    this.showVis = !this.showVis;
+    this.callPlugin({actionType: "setVisualization", visDefenetion: [visPartial]});
+  }
+
   private addFullVis(iReplace: boolean) {
     let visDefenetion = {id: "tags"}
     visDefenetion["isFullState"] = true;
@@ -370,15 +407,17 @@ export class AppComponent implements OnInit {
   }
 
   private setDefaultIndexPattern() {
-    this.callPlugin({actionType: "setDefaultIndexPattern", indexPattern: "aa"});
+    this.callPlugin({actionType: "setDefaultIndexPattern", indexPattern: "logstash-*"});
   }
 
   private pluginNotification = (e) => {
+    let that = this;
     let func = e.data.split('##')[0];
     let res = JSON.parse(e.data.split('##')[1]);
     console.log("func:", func, "res:", res);
-
-
+    if (func == "load") {
+      that.createBaseDashboard()
+    }
   };
 
 
