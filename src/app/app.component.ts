@@ -30,6 +30,37 @@ export class AppComponent implements OnInit {
   private _elasticIndex: string = "logstash-*";
   private _text: string = "";
   private showVis: boolean = false;
+  editCreateDash: boolean = false;
+  // CreateDashCode: string = " <code >\n" +
+  //   "      x = 5;<br>\n" +
+  //   "      y = 6;<br>\n" +
+  //   "      z = x + y;\n" +
+  //   "    </code>";
+
+  CreateDashCode: string = " //Define visualization object\n" +
+    "\n" +
+    "    //Set visualiztion ID\n" +
+    "    let visPartial = {id: \"bytes\"};\n" +
+    "\n" +
+    "    //Set isFullState to false meaning: the programmer pass minimal defenetion attributes\n" +
+    "    visPartial[\"isFullState\"] = false;\n" +
+    "\n" +
+    "    //Set the elasticsearch index where the data store\n" +
+    "    visPartial[\"visIndex\"] = this.elasticIndex;\n" +
+    "\n" +
+    "    //Set minimal attributes of the visualization, in this example, create pie visualization on the field bytes\n" +
+    "    visPartial[\"visState\"] = {visType: 'pie', field: 'bytes', \"title\": \"accc\"};\n" +
+    "\n" +
+    "      visPartial[\"visDashboardDefenetion\"] = {\n" +
+    "        col: 1,\n" +
+    "        id: \"bytes\",\n" +
+    "        panelIndex: 9,\n" +
+    "        row: 1,\n" +
+    "        size_x: 3,\n" +
+    "        size_y: 3,\n" +
+    "        type: \"visualization\"\n" +
+    "      };\n" +
+    "    this.callPlugin({actionType: \"setVisualization\", visDefenetion: [visPartial]});\n"
 
 
   get iframeSafeUrl(): SafeResourceUrl {
@@ -100,145 +131,9 @@ export class AppComponent implements OnInit {
 
   }
 
-  private createBaseDashboard() {
-    let visDefenetion1 = {};
-    let visDefenetion2 = {};
-    visDefenetion1["id"] = "clientip";
-    visDefenetion1["isFullState"] = true;
-    visDefenetion1["visState"] = {
-      "title": "clientip",
-      "type": "pie",
-      "params": {
-        "shareYAxis": true,
-        "addTooltip": true,
-        "addLegend": true,
-        "legendPosition": "right",
-        "isDonut": false
-      },
-      "aggs": [
-        {
-          "id": "1",
-          "enabled": true,
-          "type": "count",
-          "schema": "metric",
-          "params": {}
-        },
-        {
-          "id": "2",
-          "enabled": true,
-          "type": "terms",
-          "schema": "segment",
-          "params": {
-            "field": "clientip",
-            "size": 5,
-            "order": "desc",
-            "orderBy": "1"
-          }
-        }
-      ],
-      "listeners": {}
-    };
-    visDefenetion1["visIndex"] = this.elasticIndex;
-    visDefenetion1["visDashboardDefenetion"] = {
-      col: 1,
-      id: "clientip",
-      panelIndex: 1,
-      row: 1,
-      size_x: 5,
-      size_y: 5,
-      type: "visualization"
-    };
-
-    visDefenetion2["id"] = "memory";
-    visDefenetion2["isFullState"] = true;
-    visDefenetion2["visState"] = {
-      "title": "memory",
-      "type": "histogram",
-      "params": {
-        "shareYAxis": true,
-        "addTooltip": true,
-        "addLegend": true,
-        "legendPosition": "right",
-        "scale": "linear",
-        "mode": "stacked",
-        "times": [],
-        "addTimeMarker": false,
-        "defaultYExtents": false,
-        "setYExtents": false,
-        "yAxis": {}
-      },
-      "aggs": [
-        {
-          "id": "1",
-          "enabled": true,
-          "type": "count",
-          "schema": "metric",
-          "params": {}
-        },
-        {
-          "id": "2",
-          "enabled": true,
-          "type": "terms",
-          "schema": "segment",
-          "params": {
-            "field": "memory",
-            "size": 5,
-            "order": "desc",
-            "orderBy": "1"
-          }
-        }
-      ],
-      "listeners": {}
-    };
-    visDefenetion2["visIndex"] = this.elasticIndex;
-    visDefenetion2["visDashboardDefenetion"] = {
-      col: 7,
-      id: "memory",
-      panelIndex: 2,
-      row: 1,
-      size_x: 5,
-      size_y: 5,
-      type: "visualization"
-    };
-    this.callPlugin({actionType: "setVisualization", visDefenetion: [visDefenetion1, visDefenetion2]});
-
-
-  }
 
   private addPartialVis(iReplace: boolean) {
-    //Define visualization object
-
-    //Set visualiztion ID
-    let visPartial = {id: "bytes"};
-
-    //Set isFullState to false meaning: the programmer pass minimal defenetion attributes
-    visPartial["isFullState"] = false;
-
-    //Set the elasticsearch index where the data store
-    visPartial["visIndex"] = this.elasticIndex;
-
-    //Set minimal attributes of the visualization, in this example, create pie visualization on the field bytes
-    visPartial["visState"] = {visType: 'pie', field: 'bytes', "title": "accc"};
-
-    if (iReplace) {
-      visPartial["prevoiusVisId"] = "memory";
-
-    }
-    else {
-      visPartial["visDashboardDefenetion"] = {
-        col: 1,
-        id: "bytes",
-        panelIndex: 9,
-        row: 1,
-        size_x: 3,
-        size_y: 3,
-        type: "visualization"
-      };
-    }
-
-
-    this.callPlugin({actionType: "setVisualization", visDefenetion: [visPartial]});
-
+    eval(this.CreateDashCode);
   }
 
   private flush() {
@@ -415,9 +310,9 @@ export class AppComponent implements OnInit {
     let func = e.data.split('##')[0];
     let res = JSON.parse(e.data.split('##')[1]);
     console.log("func:", func, "res:", res);
-    if (func == "load") {
-      that.createBaseDashboard()
-    }
+    // if (func == "load") {
+    //   that.createBaseDashboard()
+    // }
   };
 
 

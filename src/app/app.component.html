@@ -2,7 +2,12 @@
   {{title}}
 </h1>
 
-<button (click)="createBaseDashboard()">Create basic dashboard</button>
+<div>
+  <button (click)="createBaseDashboard()">Create basic dashboard</button>
+  <span (click)="editCreateDash=!editCreateDash">Edit the code</span>
+  <br>
+  <textarea rows="50" cols="50" [hidden]="!editCreateDash" [(ngModel)]="CreateDashCode"></textarea>
+</div>
 
 <button (click)="addFullVis(false)">Add Full State Visualization</button>
 <button (click)="addFullVis(true)">Replace Full State Visualization</button>
