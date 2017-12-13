@@ -3,23 +3,25 @@
 </h1>
 
 <div>
-  <button (click)="createBaseDashboard()">Create basic dashboard</button>
+  <!--<button (click)="createBaseDashboard()">Create basic dashboard</button>-->
+  <button (click)="addPartialVis(false)">Add Partial State Visualization</button>
+
   <span (click)="editCreateDash=!editCreateDash">Edit the code</span>
   <br>
   <textarea rows="50" cols="50" [hidden]="!editCreateDash" [(ngModel)]="CreateDashCode"></textarea>
 </div>
 
-<button (click)="addFullVis(false)">Add Full State Visualization</button>
-<button (click)="addFullVis(true)">Replace Full State Visualization</button>
-<button (click)="addPartialVis(false)">Add Partial State Visualization</button>
-<button (click)="addPartialVis(true)">Replace Partial State Visualization</button>
-<input type="text" [(ngModel)]="text">
-<button (click)="searchText(text)">Search Text</button>
-<button (click)="createIndexPattern()">Create Index Pattern</button>
-<button (click)="isIndexPatternExist()">Is Index Pattern Exist</button>
-<button (click)="setDefaultIndexPattern()">setDefaultIndexPattern</button>
-<button (click)="toggle()">toggle</button>
-<button (click)="flush()">flush</button>
+<!--<button (click)="addFullVis(false)">Add Full State Visualization</button>-->
+<!--<button (click)="addFullVis(true)">Replace Full State Visualization</button>-->
+<!--<button (click)="addPartialVis(false)">Add Partial State Visualization</button>-->
+<!--<button (click)="addPartialVis(true)">Replace Partial State Visualization</button>-->
+<!--<input type="text" [(ngModel)]="text">-->
+<!--<button (click)="searchText(text)">Search Text</button>-->
+<!--<button (click)="createIndexPattern()">Create Index Pattern</button>-->
+<!--<button (click)="isIndexPatternExist()">Is Index Pattern Exist</button>-->
+<!--<button (click)="setDefaultIndexPattern()">setDefaultIndexPattern</button>-->
+<!--<button (click)="toggle()">toggle</button>-->
+<!--<button (click)="flush()">flush</button>-->
 
 <iframe id="multintIframe" *ngIf="_iframeSafeUrl" [src]="_iframeSafeUrl" frameborder="0" scrolling="no" height="934px"
         width="100%"></iframe>

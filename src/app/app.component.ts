@@ -31,36 +31,63 @@ export class AppComponent implements OnInit {
   private _text: string = "";
   private showVis: boolean = false;
   editCreateDash: boolean = false;
-  // CreateDashCode: string = " <code >\n" +
-  //   "      x = 5;<br>\n" +
-  //   "      y = 6;<br>\n" +
-  //   "      z = x + y;\n" +
-  //   "    </code>";
 
-  CreateDashCode: string = " //Define visualization object\n" +
-    "\n" +
-    "    //Set visualiztion ID\n" +
-    "    let visPartial = {id: \"bytes\"};\n" +
-    "\n" +
-    "    //Set isFullState to false meaning: the programmer pass minimal defenetion attributes\n" +
-    "    visPartial[\"isFullState\"] = false;\n" +
-    "\n" +
-    "    //Set the elasticsearch index where the data store\n" +
-    "    visPartial[\"visIndex\"] = this.elasticIndex;\n" +
-    "\n" +
-    "    //Set minimal attributes of the visualization, in this example, create pie visualization on the field bytes\n" +
-    "    visPartial[\"visState\"] = {visType: 'pie', field: 'bytes', \"title\": \"accc\"};\n" +
-    "\n" +
-    "      visPartial[\"visDashboardDefenetion\"] = {\n" +
-    "        col: 1,\n" +
-    "        id: \"bytes\",\n" +
-    "        panelIndex: 9,\n" +
-    "        row: 1,\n" +
-    "        size_x: 3,\n" +
-    "        size_y: 3,\n" +
-    "        type: \"visualization\"\n" +
-    "      };\n" +
-    "    this.callPlugin({actionType: \"setVisualization\", visDefenetion: [visPartial]});\n"
+
+  // CreateDashCode: string = " //Define visualization object\n" +
+  //   "\n" +
+  //   "    //Set visualiztion ID\n" +
+  //   "    let visPartial = {id: \"bytes\"};\n" +
+  //   "\n" +
+  //   "    //Set isFullState to false meaning: the programmer pass minimal defenetion attributes\n" +
+  //   "    visPartial[\"isFullState\"] = false;\n" +
+  //   "\n" +
+  //   "    //Set the elasticsearch index where the data store\n" +
+  //   "    visPartial[\"visIndex\"] = this.elasticIndex;\n" +
+  //   "\n" +
+  //   "    //Set minimal attributes of the visualization, in this example, create pie visualization on the field bytes\n" +
+  //   "    visPartial[\"visState\"] = {visType: 'pie', field: 'bytes', \"title\": \"accc\"};\n" +
+  //   "\n" +
+  //   "      visPartial[\"visDashboardDefenetion\"] = {\n" +
+  //   "        col: 1,\n" +
+  //   "        id: \"bytes\",\n" +
+  //   "        panelIndex: 9,\n" +
+  //   "        row: 1,\n" +
+  //   "        size_x: 3,\n" +
+  //   "        size_y: 3,\n" +
+  //   "        type: \"visualization\"\n" +
+  //   "      };\n" +
+  //   "    this.callPlugin({actionType: \"setVisualization\", visDefenetion: [visPartial]});\n"
+  entire = this.createVis.toString();
+
+  CreateDashCode: string = this.entire.slice(this.entire.indexOf("{") + 1, this.entire.lastIndexOf("}"));
+
+
+  createVis() {
+    //Define visualization object
+    let field: string = "bytes"
+    //Set visualiztion ID
+    let visPartial = {id: field};
+
+    //Set isFullState to false meaning: the programmer pass minimal defenetion attributes
+    visPartial["isFullState"] = false;
+
+    //Set the elasticsearch index where the data store
+    visPartial["visIndex"] = this.elasticIndex;
+
+    //Set minimal attributes of the visualization, in this example, create pie visualization on the field bytes
+    visPartial["visState"] = {visType: 'pie', field: field, "title": "accc"};
+
+    visPartial["visDashboardDefenetion"] = {
+      col: 1,
+      id: field,
+      panelIndex: 9,
+      row: 1,
+      size_x: 3,
+      size_y: 3,
+      type: "visualization"
+    };
+    this.callPlugin({actionType: "setVisualization", visDefenetion: [visPartial]});
+  }
 
 
   get iframeSafeUrl(): SafeResourceUrl {
