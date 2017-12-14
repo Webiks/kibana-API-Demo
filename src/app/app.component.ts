@@ -246,6 +246,14 @@ export class AppComponent implements OnInit {
 
   }
 
+  private setTime() {
+    this.callPlugin({
+      actionType: "setDashboardTime",
+      time: {from: '2015-12-14T14:56:26.288Z', to: '2015-12-14T15:11:26.289Z', mode: "absolute"}
+    });
+
+  }
+
   private toggle() {
     let visPartial = {};
 
@@ -415,9 +423,9 @@ export class AppComponent implements OnInit {
     let func = e.data.split('##')[0];
     let res = JSON.parse(e.data.split('##')[1]);
     console.log("func:", func, "res:", res);
-    if (func == "load") {
-      that.createBaseDashboard()
-    }
+    // if (func == "load") {
+    //   that.createBaseDashboard()
+    // }
   };
 
 
