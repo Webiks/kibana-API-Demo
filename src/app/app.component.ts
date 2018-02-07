@@ -11,17 +11,14 @@ export class AppComponent implements OnInit {
 
   title = 'kibana API demo';
 
-  //url for dev
-  //url = "https://localhost:5601/rey/app/kibana#/dashboard?embed=true&_g=(time:(from:now-5y,mode:quick,to:now))&_a=(filters:!(),options:(darkTheme:!f),panels:!(),query:(query_string:(analyze_wildcard:!t,query:'*')),timeRestore:!f,title:plugin,uiState:(),viewMode:view)";
+  kibanaVersion = "6.1.2";
 
-  //url for dev version 6.0.0
-  url = "http://localhost:5601/rey/app/kibana#/dashboard?embed=true&_g=(time:(from:now-5y,mode:quick,to:now))&_a=(filters:!(),options:(darkTheme:!f),panels:!(),query:(query_string:(analyze_wildcard:!t,query:'*')),timeRestore:!f,title:plugin,uiState:(),viewMode:view)";
 
   //url for not dev
   //url = "http://localhost:5601/app/kibana#/dashboard?embed=true&_g=(time:(from:now-5y,mode:quick,to:now))&_a=(filters:!(),options:(darkTheme:!f),panels:!(),query:(query_string:(analyze_wildcard:!t,query:'*')),timeRestore:!f,title:plugin,uiState:(),viewMode:view)";
 
-  //url for kibana version 5.3.0
-  //url = "https://localhost:5601/rey/app/kibana#/dashboard/create?embed=true&_g=(time:(from:now-5y,mode:quick,to:now))&_a=(filters:!(),options:(darkTheme:!f),panels:!(),query:(query_string:(analyze_wildcard:!t,query:'*')),timeRestore:!f,title:plugin,uiState:(),viewMode:view)";
+
+  url = this.getUrl();
   private _iframeUrl: string = this.url;
 
   private _iframeSafeUrl: SafeResourceUrl;
@@ -31,6 +28,21 @@ export class AppComponent implements OnInit {
   private _text: string = "";
   private showVis: boolean = false;
 
+  getUrl() {
+    switch (this.kibanaVersion) {
+      case "6.0.0":
+      case "6.0.1":
+        return "http://localhost:5601/rey/app/kibana#/dashboard?embed=true&_g=(time:(from:now-5y,mode:quick,to:now))&_a=(filters:!(),options:(darkTheme:!f),panels:!(),query:(query_string:(analyze_wildcard:!t,query:'*')),timeRestore:!f,title:plugin,uiState:(),viewMode:view)";
+      case "6.1.0":
+      case "6.1.1":
+      case "6.1.2":
+      case "6.1.3":
+        return "http://localhost:5601/izt/app/kibana#/dashboard?embed=true&_g=(time:(from:now-5y,mode:quick,to:now))&_a=(description:'',filters:!(),fullScreenMode:!f,options:(darkTheme:!f,hidePanelTitles:!f,useMargins:!t),panels:!(),query:(language:lucene,query:''),timeRestore:!f,title:'New+Dashboard',uiState:(),viewMode:view)";
+      case "5.3.0":
+        return "https://localhost:5601/rey/app/kibana#/dashboard/create?embed=true&_g=(time:(from:now-5y,mode:quick,to:now))&_a=(filters:!(),options:(darkTheme:!f),panels:!(),query:(query_string:(analyze_wildcard:!t,query:'*')),timeRestore:!f,title:plugin,uiState:(),viewMode:view)";
+
+    }
+  }
 
   get iframeSafeUrl(): SafeResourceUrl {
     return this._iframeSafeUrl;
@@ -139,15 +151,27 @@ export class AppComponent implements OnInit {
       "listeners": {}
     };
     visDefenetion1["visIndex"] = this.elasticIndex;
-    visDefenetion1["visDashboardDefenetion"] = {
-      col: 1,
-      id: "clientip",
-      panelIndex: 1,
-      row: 1,
-      size_x: 5,
-      size_y: 5,
-      type: "visualization"
-    };
+    if (Number(this.kibanaVersion.split('-')[0].split('.')[0]) < 6 || this.kibanaVersion == "6.0.0" || this.kibanaVersion == "6.0.1") {
+      visDefenetion1["visDashboardDefenetion"] = {
+        col: 1,
+        id: "clientip",
+        panelIndex: 1,
+        row: 1,
+        size_x: 5,
+        size_y: 5,
+        type: "visualization"
+      };
+    }
+    else {
+      visDefenetion1["visDashboardDefenetion"] = {
+        gridData: {h: 3, i: '1', w: 6, x: 0, y: 0},
+        id: "clientip",
+        panelIndex: '1',
+        type: "visualization",
+        version: "6.1.0"
+      };
+    }
+
 
     visDefenetion2["id"] = "memory";
     visDefenetion2["isFullState"] = true;
@@ -191,15 +215,29 @@ export class AppComponent implements OnInit {
       "listeners": {}
     };
     visDefenetion2["visIndex"] = this.elasticIndex;
-    visDefenetion2["visDashboardDefenetion"] = {
-      col: 7,
-      id: "memory",
-      panelIndex: 2,
-      row: 1,
-      size_x: 5,
-      size_y: 5,
-      type: "visualization"
-    };
+    if (Number(this.kibanaVersion.split('-')[0].split('.')[0]) < 6 || this.kibanaVersion == "6.0.0" || this.kibanaVersion == "6.0.1") {
+
+      visDefenetion2["visDashboardDefenetion"] = {
+        col: 7,
+        id: "memory",
+        panelIndex: 2,
+        row: 1,
+        size_x: 5,
+        size_y: 5,
+        type: "visualization"
+      };
+    }
+    else {
+      visDefenetion2["visDashboardDefenetion"] = {
+        gridData: {h: 3, i: '2', w: 6, x: 6, y: 0},
+        id: "memory",
+        panelIndex: '2',
+        type: "visualization",
+        version: "6.1.0"
+
+      }
+    }
+    ;
     this.callPlugin({actionType: "setVisualization", visDefenetion: [visDefenetion1, visDefenetion2]});
 
 
@@ -249,13 +287,22 @@ export class AppComponent implements OnInit {
   private setTime() {
     this.callPlugin({
       actionType: "setDashboardTime",
-      time: {from: '2015-12-14T14:56:26.288Z', to: '2015-12-14T15:11:26.289Z', mode: "absolute"}
+      time: {from: '2020-01-17T11:50:22.377', to: '2020-10-17T12:05:22.377', mode: "absolute"}
     });
 
+    // this.callPlugin({
+    //   actionType: "setDashboardTime",
+    //   time: {from: 'now-24h', to: 'now', mode: "quick"}
+    // });
+
+    // this.callPlugin({
+    //   actionType: "setDashboardTime",
+    //   time: {from: 'now-12h', to: 'now', mode: "relative"}
+    // });
   }
 
   private toggle() {
-    let visPartial = {};
+    let visPartial = {"visIndex": this.elasticIndex};
 
     if (!this.showVis) {
       visPartial["prevoiusVisId"] = "memory";
@@ -420,9 +467,11 @@ export class AppComponent implements OnInit {
 
   private pluginNotification = (e) => {
     let that = this;
-    let func = e.data.split('##')[0];
-    let res = JSON.parse(e.data.split('##')[1]);
-    console.log("func:", func, "res:", res);
+    if (e.data && !e.data.type) {
+      let func = e.data.split('##')[0];
+      let res = JSON.parse(e.data.split('##')[1]);
+      console.log("func:", func, "res:", res);
+    }
     // if (func == "load") {
     //   that.createBaseDashboard()
     // }
