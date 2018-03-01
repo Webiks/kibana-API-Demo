@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {SafeResourceUrl, DomSanitizer} from "@angular/platform-browser";
+import {SafeResourceUrl, DomSanitizer} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +11,7 @@ export class AppComponent implements OnInit {
 
   title = 'kibana API demo';
 
-  kibanaVersion = "6.1.2";
+  kibanaVersion = '5.5.3';
 
 
   //url for not dev
@@ -24,22 +24,27 @@ export class AppComponent implements OnInit {
   private _iframeSafeUrl: SafeResourceUrl;
   private _iframeElement: any;
   private _iframeWindow: any;
-  private _elasticIndex: string = "logstash-*";
-  private _text: string = "";
+  private _elasticIndex: string = 'logstash-*';
+  private _text: string = '';
   private showVis: boolean = false;
 
   getUrl() {
     switch (this.kibanaVersion) {
-      case "6.0.0":
-      case "6.0.1":
-        return "http://localhost:5601/rey/app/kibana#/dashboard?embed=true&_g=(time:(from:now-5y,mode:quick,to:now))&_a=(filters:!(),options:(darkTheme:!f),panels:!(),query:(query_string:(analyze_wildcard:!t,query:'*')),timeRestore:!f,title:plugin,uiState:(),viewMode:view)";
-      case "6.1.0":
-      case "6.1.1":
-      case "6.1.2":
-      case "6.1.3":
-        return "http://localhost:5601/izt/app/kibana#/dashboard?embed=true&_g=(time:(from:now-5y,mode:quick,to:now))&_a=(description:'',filters:!(),fullScreenMode:!f,options:(darkTheme:!f,hidePanelTitles:!f,useMargins:!t),panels:!(),query:(language:lucene,query:''),timeRestore:!f,title:'New+Dashboard',uiState:(),viewMode:view)";
-      case "5.3.0":
-        return "https://localhost:5601/rey/app/kibana#/dashboard/create?embed=true&_g=(time:(from:now-5y,mode:quick,to:now))&_a=(filters:!(),options:(darkTheme:!f),panels:!(),query:(query_string:(analyze_wildcard:!t,query:'*')),timeRestore:!f,title:plugin,uiState:(),viewMode:view)";
+      case '6.0.0':
+      case '6.0.1':
+
+        return 'http://localhost:5601/rey/app/kibana#/dashboard?embed=true&_g=(time:(from:now-5y,mode:quick,to:now))&_a=(filters:!(),options:(darkTheme:!f),panels:!(),query:(query_string:(analyze_wildcard:!t,query:\'*\')),timeRestore:!f,title:plugin,uiState:(),viewMode:view)';
+
+      case '6.1.0':
+      case '6.1.1':
+      case '6.1.2':
+      case '6.1.3':
+        return 'http://localhost:5601/izt/app/kibana#/dashboard?embed=true&_g=(time:(from:now-5y,mode:quick,to:now))&_a=(description:\'\',filters:!(),fullScreenMode:!f,options:(darkTheme:!f,hidePanelTitles:!f,useMargins:!t),panels:!(),query:(language:lucene,query:\'\'),timeRestore:!f,title:\'New+Dashboard\',uiState:(),viewMode:view)';
+      case '5.5.3':
+
+        return 'https://localhost:5601/ayl/app/kibana#/dashboard?embed=true&_g=(time:(from:now-5y,mode:quick,to:now))&_a=(description:\'\',filters:!(),options:(darkTheme:!f),panels:!(),query:(match_all:()),timeRestore:!f,title:\'New%20Dashboard\',uiState:(),viewMode:edit)';
+      case '5.3.0':
+        return 'https://localhost:5601/rey/app/kibana#/dashboard/create?embed=true&_g=(time:(from:now-5y,mode:quick,to:now))&_a=(filters:!(),options:(darkTheme:!f),panels:!(),query:(query_string:(analyze_wildcard:!t,query:\'*\')),timeRestore:!f,title:plugin,uiState:(),viewMode:view)';
 
     }
   }
@@ -103,9 +108,9 @@ export class AppComponent implements OnInit {
 
   private iFrameAddListener() {
     let that = this;
-    let eventMethod = "addEventListener";
+    let eventMethod = 'addEventListener';
     let eventer = window[eventMethod];
-    let messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
+    let messageEvent = eventMethod == 'attachEvent' ? 'onmessage' : 'message';
 
     // Listen to message from parent (or any other) window
     eventer(messageEvent, this.pluginNotification);
@@ -115,130 +120,139 @@ export class AppComponent implements OnInit {
   private createBaseDashboard() {
     let visDefenetion1 = {};
     let visDefenetion2 = {};
-    visDefenetion1["id"] = "clientip";
-    visDefenetion1["isFullState"] = true;
-    visDefenetion1["visState"] = {
-      "title": "clientip",
-      "type": "pie",
-      "params": {
-        "shareYAxis": true,
-        "addTooltip": true,
-        "addLegend": true,
-        "legendPosition": "right",
-        "isDonut": false
+    visDefenetion1['id'] = 'clientip';
+    visDefenetion1['isFullState'] = true;
+    visDefenetion1['visState'] = {
+      'title': 'clientip',
+      'type': 'pie',
+      'params': {
+        'shareYAxis': true,
+        'addTooltip': true,
+        'addLegend': true,
+        'legendPosition': 'right',
+        'isDonut': false
       },
-      "aggs": [
+      'aggs': [
         {
-          "id": "1",
-          "enabled": true,
-          "type": "count",
-          "schema": "metric",
-          "params": {}
+          'id': '1',
+          'enabled': true,
+          'type': 'count',
+          'schema': 'metric',
+          'params': {}
         },
         {
-          "id": "2",
-          "enabled": true,
-          "type": "terms",
-          "schema": "segment",
-          "params": {
-            "field": "clientip",
-            "size": 5,
-            "order": "desc",
-            "orderBy": "1"
+          'id': '2',
+          'enabled': true,
+          'type': 'terms',
+          'schema': 'segment',
+          'params': {
+            'field': 'clientip',
+            'size': 5,
+            'order': 'desc',
+            'orderBy': '1'
           }
         }
       ],
-      "listeners": {}
+      'listeners': {}
     };
-    visDefenetion1["visIndex"] = this.elasticIndex;
-    if (Number(this.kibanaVersion.split('-')[0].split('.')[0]) < 6 || this.kibanaVersion == "6.0.0" || this.kibanaVersion == "6.0.1") {
-      visDefenetion1["visDashboardDefenetion"] = {
+    visDefenetion1['visIndex'] = this.elasticIndex;
+    if (Number(this.kibanaVersion.split('-')[0].split('.')[0]) < 6 || this.kibanaVersion == '6.0.0' || this.kibanaVersion == '6.0.1') {
+      visDefenetion1['visDashboardDefenetion'] = {
         col: 1,
-        id: "clientip",
+        id: 'clientip',
         panelIndex: 1,
         row: 1,
         size_x: 5,
         size_y: 5,
-        type: "visualization"
+        type: 'visualization'
       };
     }
     else {
-      visDefenetion1["visDashboardDefenetion"] = {
+      visDefenetion1['visDashboardDefenetion'] = {
         gridData: {h: 3, i: '1', w: 6, x: 0, y: 0},
-        id: "clientip",
+        id: 'clientip',
         panelIndex: '1',
-        type: "visualization",
-        version: "6.1.0"
+        type: 'visualization',
+        version: '6.1.0'
       };
     }
 
 
-    visDefenetion2["id"] = "memory";
-    visDefenetion2["isFullState"] = true;
-    visDefenetion2["visState"] = {
-      "title": "memory",
-      "type": "histogram",
-      "params": {
-        "shareYAxis": true,
-        "addTooltip": true,
-        "addLegend": true,
-        "legendPosition": "right",
-        "scale": "linear",
-        "mode": "stacked",
-        "times": [],
-        "addTimeMarker": false,
-        "defaultYExtents": false,
-        "setYExtents": false,
-        "yAxis": {}
+    visDefenetion2['id'] = 'memory';
+    visDefenetion2['isFullState'] = true;
+    visDefenetion2['visState'] = {
+      'title': 'memory',
+      'type': 'histogram',
+      'params': {
+        'shareYAxis': true,
+        'addTooltip': true,
+        'addLegend': true,
+        'legendPosition': 'right',
+        'scale': 'linear',
+        'mode': 'stacked',
+        'times': [],
+        'addTimeMarker': false,
+        'defaultYExtents': false,
+        'setYExtents': false,
+        'yAxis': {}
       },
-      "aggs": [
+      'aggs': [
         {
-          "id": "1",
-          "enabled": true,
-          "type": "count",
-          "schema": "metric",
-          "params": {}
+          'id': '1',
+          'enabled': true,
+          'type': 'count',
+          'schema': 'metric',
+          'params': {}
         },
         {
-          "id": "2",
-          "enabled": true,
-          "type": "terms",
-          "schema": "segment",
-          "params": {
-            "field": "memory",
-            "size": 5,
-            "order": "desc",
-            "orderBy": "1"
+          'id': '2',
+          'enabled': true,
+          'type': 'terms',
+          'schema': 'segment',
+          'params': {
+            'field': 'memory',
+            'size': 5,
+            'order': 'desc',
+            'orderBy': '1'
           }
         }
       ],
-      "listeners": {}
+      'listeners': {}
     };
-    visDefenetion2["visIndex"] = this.elasticIndex;
-    if (Number(this.kibanaVersion.split('-')[0].split('.')[0]) < 6 || this.kibanaVersion == "6.0.0" || this.kibanaVersion == "6.0.1") {
+    visDefenetion2['visIndex'] = this.elasticIndex;
+    //visDefenetion2['query'] = 'error'
+    visDefenetion2['query'] = {
+      'range': {
+        'memory': {
+          'gte': 1
 
-      visDefenetion2["visDashboardDefenetion"] = {
+        }
+      }
+    }
+    if (Number(this.kibanaVersion.split('-')[0].split('.')[0]) < 6 || this.kibanaVersion == '6.0.0' || this.kibanaVersion == '6.0.1') {
+
+      visDefenetion2['visDashboardDefenetion'] = {
         col: 7,
-        id: "memory",
+        id: 'memory',
         panelIndex: 2,
         row: 1,
         size_x: 5,
         size_y: 5,
-        type: "visualization"
+        type: 'visualization'
       };
     }
     else {
-      visDefenetion2["visDashboardDefenetion"] = {
+      visDefenetion2['visDashboardDefenetion'] = {
         gridData: {h: 3, i: '2', w: 6, x: 6, y: 0},
-        id: "memory",
+        id: 'memory',
         panelIndex: '2',
-        type: "visualization",
-        version: "6.1.0"
+        type: 'visualization',
+        version: '6.1.0'
 
       }
     }
     ;
-    this.callPlugin({actionType: "setVisualization", visDefenetion: [visDefenetion1, visDefenetion2]});
+    this.callPlugin({actionType: 'setVisualization', visDefenetion: [visDefenetion1, visDefenetion2]});
 
 
   }
@@ -247,47 +261,47 @@ export class AppComponent implements OnInit {
     //Define visualization object
 
     //Set visualiztion ID
-    let visPartial = {id: "bytes"};
+    let visPartial = {id: 'bytes'};
 
     //Set isFullState to false meaning: the programmer pass minimal defenetion attributes
-    visPartial["isFullState"] = false;
+    visPartial['isFullState'] = false;
 
     //Set the elasticsearch index where the data store
-    visPartial["visIndex"] = this.elasticIndex;
+    visPartial['visIndex'] = this.elasticIndex;
 
     //Set minimal attributes of the visualization, in this example, create pie visualization on the field bytes
-    visPartial["visState"] = {visType: 'pie', field: 'bytes', "title": "accc"};
+    visPartial['visState'] = {visType: 'pie', field: 'bytes', 'title': 'accc'};
 
     if (iReplace) {
-      visPartial["prevoiusVisId"] = "memory";
+      visPartial['prevoiusVisId'] = 'memory';
 
     }
     else {
-      visPartial["visDashboardDefenetion"] = {
+      visPartial['visDashboardDefenetion'] = {
         col: 1,
-        id: "bytes",
+        id: 'bytes',
         panelIndex: 9,
         row: 1,
         size_x: 3,
         size_y: 3,
-        type: "visualization"
+        type: 'visualization'
       };
     }
 
 
-    this.callPlugin({actionType: "setVisualization", visDefenetion: [visPartial]});
+    this.callPlugin({actionType: 'setVisualization', visDefenetion: [visPartial]});
 
   }
 
   private flush() {
-    this.callPlugin({actionType: "flushSearchChip"});
+    this.callPlugin({actionType: 'flushSearchChip'});
 
   }
 
   private setTime() {
     this.callPlugin({
-      actionType: "setDashboardTime",
-      time: {from: '2020-01-17T11:50:22.377', to: '2020-10-17T12:05:22.377', mode: "absolute"}
+      actionType: 'setDashboardTime',
+      time: {from: '2020-01-17T11:50:22.377', to: '2020-10-17T12:05:22.377', mode: 'absolute'}
     });
 
     // this.callPlugin({
@@ -302,80 +316,80 @@ export class AppComponent implements OnInit {
   }
 
   private toggle() {
-    let visPartial = {"visIndex": this.elasticIndex};
+    let visPartial = {'visIndex': this.elasticIndex};
 
     if (!this.showVis) {
-      visPartial["prevoiusVisId"] = "memory";
+      visPartial['prevoiusVisId'] = 'memory';
     }
     else {
-      visPartial["visDashboardDefenetion"] = {
+      visPartial['visDashboardDefenetion'] = {
         col: 1,
-        id: "memory",
+        id: 'memory',
         panelIndex: 9,
         row: 1,
         size_x: 3,
         size_y: 3,
-        type: "visualization"
+        type: 'visualization'
       };
     }
 
     this.showVis = !this.showVis;
-    this.callPlugin({actionType: "setVisualization", visDefenetion: [visPartial]});
+    this.callPlugin({actionType: 'setVisualization', visDefenetion: [visPartial]});
   }
 
   private addFullVis(iReplace: boolean) {
-    let visDefenetion = {id: "tags"}
-    visDefenetion["isFullState"] = true;
-    visDefenetion["visState"] = {
-      "title": "tags",
-      "type": "tagcloud",
-      "params": {
-        "scale": "linear",
-        "orientation": "single",
-        "minFontSize": 18,
-        "maxFontSize": 72
+    let visDefenetion = {id: 'tags'}
+    visDefenetion['isFullState'] = true;
+    visDefenetion['visState'] = {
+      'title': 'tags',
+      'type': 'tagcloud',
+      'params': {
+        'scale': 'linear',
+        'orientation': 'single',
+        'minFontSize': 18,
+        'maxFontSize': 72
       },
-      "aggs": [
+      'aggs': [
         {
-          "id": "1",
-          "enabled": true,
-          "type": "count",
-          "schema": "metric",
-          "params": {}
+          'id': '1',
+          'enabled': true,
+          'type': 'count',
+          'schema': 'metric',
+          'params': {}
         },
         {
-          "id": "2",
-          "enabled": true,
-          "type": "terms",
-          "schema": "segment",
-          "params": {
-            "field": "@tags.raw",
-            "size": 5,
-            "order": "desc",
-            "orderBy": "1"
+          'id': '2',
+          'enabled': true,
+          'type': 'terms',
+          'schema': 'segment',
+          'params': {
+            'field': '@tags.raw',
+            'size': 5,
+            'order': 'desc',
+            'orderBy': '1'
           }
         }
       ],
-      "listeners": {}
+      'listeners': {}
     };
-    visDefenetion["visIndex"] = this.elasticIndex;
+    visDefenetion['visIndex'] = this.elasticIndex;
     if (iReplace) {
-      visDefenetion["prevoiusVisId"] = "memory";
+      visDefenetion['prevoiusVisId'] = 'memory';
 
     }
     else {
-      visDefenetion["visDashboardDefenetion"] = {
+      visDefenetion['visDashboardDefenetion'] = {
         col: 1,
-        id: "tags",
+        id: 'tags',
         panelIndex: 3,
         row: 1,
         size_x: 3,
         size_y: 3,
-        type: "visualization"
+        type: 'visualization'
       };
     }
 
-    this.callPlugin({actionType: "setVisualization", visDefenetion: [visDefenetion]});
+    this.callPlugin({actionType: 'setVisualization', visDefenetion: [visDefenetion]});
 
   }
 
@@ -392,57 +406,57 @@ export class AppComponent implements OnInit {
   private aa() {
 
 
-    var visDefenetion2 = {id: "memory"};
-    visDefenetion2["isFullState"] = true;
-    visDefenetion2["visIndex"] = "logstash-*";
+    var visDefenetion2 = {id: 'memory'};
+    visDefenetion2['isFullState'] = true;
+    visDefenetion2['visIndex'] = 'logstash-*';
 
-    visDefenetion2["visState"] = {
-      "title": "memory",
-      "type": "histogram",
-      "params": {
-        "shareYAxis": true,
-        "addTooltip": true,
-        "addLegend": true,
-        "legendPosition": "right",
-        "scale": "linear",
-        "mode": "stacked",
-        "times": [],
-        "addTimeMarker": false,
-        "defaultYExtents": false,
-        "setYExtents": false,
-        "yAxis": {}
+    visDefenetion2['visState'] = {
+      'title': 'memory',
+      'type': 'histogram',
+      'params': {
+        'shareYAxis': true,
+        'addTooltip': true,
+        'addLegend': true,
+        'legendPosition': 'right',
+        'scale': 'linear',
+        'mode': 'stacked',
+        'times': [],
+        'addTimeMarker': false,
+        'defaultYExtents': false,
+        'setYExtents': false,
+        'yAxis': {}
       },
-      "aggs": [
+      'aggs': [
         {
-          "id": "1",
-          "enabled": true,
-          "type": "count",
-          "schema": "metric",
-          "params": {}
+          'id': '1',
+          'enabled': true,
+          'type': 'count',
+          'schema': 'metric',
+          'params': {}
         },
         {
-          "id": "2",
-          "enabled": true,
-          "type": "terms",
-          "schema": "segment",
-          "params": {
-            "field": "memory",
-            "size": 5,
-            "order": "desc",
-            "orderBy": "1"
+          'id': '2',
+          'enabled': true,
+          'type': 'terms',
+          'schema': 'segment',
+          'params': {
+            'field': 'memory',
+            'size': 5,
+            'order': 'desc',
+            'orderBy': '1'
           }
         }
       ],
-      "listeners": {}
+      'listeners': {}
     };
-    visDefenetion2["prevoiusVisId"] = "6c750e90-49f7-11e7-9840-33c48f0b32ab";
+    visDefenetion2['prevoiusVisId'] = '6c750e90-49f7-11e7-9840-33c48f0b32ab';
 
 
     var visDelete = {};
 
-    visDelete["isFullState"] = false;
-    visDelete["visState"] = null;
-    visDelete["prevoiusVisId"] = "amper1";
+    visDelete['isFullState'] = false;
+    visDelete['visState'] = null;
+    visDelete['prevoiusVisId'] = 'amper1';
 
     // this.iframeWindow.postMessage({actionType: "setVisualization", visDefenetion: [visPartial]}, '*');
 
@@ -450,19 +464,19 @@ export class AppComponent implements OnInit {
   }
 
   private searchText(iText) {
-    this.callPlugin({actionType: "addSearchChip", text: iText, index: this.elasticIndex});
+    this.callPlugin({actionType: 'addSearchChip', text: iText, index: this.elasticIndex});
   }
 
   private createIndexPattern() {
-    this.callPlugin({actionType: "createIndexPattern", index: this.elasticIndex, timeField: "@timestamp"});
+    this.callPlugin({actionType: 'createIndexPattern', index: this.elasticIndex, timeField: '@timestamp'});
   }
 
   private isIndexPatternExist() {
-    this.callPlugin({actionType: "isIndexPatternExist", indexPattern: this.elasticIndex});
+    this.callPlugin({actionType: 'isIndexPatternExist', indexPattern: this.elasticIndex});
   }
 
   private setDefaultIndexPattern() {
-    this.callPlugin({actionType: "setDefaultIndexPattern", indexPattern: "logstash-*"});
+    this.callPlugin({actionType: 'setDefaultIndexPattern', indexPattern: 'logstash-*'});
   }
 
   private pluginNotification = (e) => {
@@ -470,7 +484,7 @@ export class AppComponent implements OnInit {
     if (e.data && !e.data.type) {
       let func = e.data.split('##')[0];
       let res = JSON.parse(e.data.split('##')[1]);
-      console.log("func:", func, "res:", res);
+      console.log('func:', func, 'res:', res);
     }
     // if (func == "load") {
     //   that.createBaseDashboard()
