@@ -11,7 +11,7 @@ export class AppComponent implements OnInit {
 
   title = 'kibana API demo';
 
-  kibanaVersion = '5.5.3';
+  kibanaVersion = '6.3.0';
 
 
   //url for not dev
@@ -28,6 +28,11 @@ export class AppComponent implements OnInit {
   private _text: string = '';
   private showVis: boolean = false;
 
+  versionToFloat() {
+    const versionSplit = this.kibanaVersion.split('.');
+    return Number(versionSplit[0] + '.' + versionSplit[1]);
+  }
+
   getUrl() {
     switch (this.kibanaVersion) {
       case '6.0.0':
@@ -39,6 +44,8 @@ export class AppComponent implements OnInit {
       case '6.1.1':
       case '6.1.2':
       case '6.1.3':
+      case '6.2.2':
+      case '6.3.0':
         return 'http://localhost:5601/izt/app/kibana#/dashboard?embed=true&_g=(time:(from:now-5y,mode:quick,to:now))&_a=(description:\'\',filters:!(),fullScreenMode:!f,options:(darkTheme:!f,hidePanelTitles:!f,useMargins:!t),panels:!(),query:(language:lucene,query:\'\'),timeRestore:!f,title:\'New+Dashboard\',uiState:(),viewMode:view)';
       case '5.5.3':
 
@@ -372,6 +379,9 @@ export class AppComponent implements OnInit {
       ],
       'listeners': {}
     };
+    if (this.versionToFloat() >= 6.3) {
+      visDefenetion['visState'].aggs[1].params.field = '@tags.keyword';
+    }
     visDefenetion['visIndex'] = this.elasticIndex;
     if (iReplace) {
       visDefenetion['prevoiusVisId'] = 'memory';
